@@ -39,9 +39,39 @@ public class Game1 : Core
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
+        // the bounds of the icon within the texture
+        Rectangle iconSourceRect = new Rectangle(0, 0, 128, 128);
+        // the bounds of the wordmark within the texture
+        Rectangle wordmarkSourceRect = new Rectangle(150, 34, 458, 58);
+
         // TODO: Add your drawing code here
-        SpriteBatch.Begin();
-        SpriteBatch.Draw(_logo, Vector2.Zero, Color.White);
+        SpriteBatch.Begin(sortMode: SpriteSortMode.BackToFront);
+        SpriteBatch.Draw(_logo, // texture
+            new Vector2( // position
+                Window.ClientBounds.Width,
+                Window.ClientBounds.Height) * 0.5f,
+            iconSourceRect, // source rectangle
+            Color.White, // color
+            0.0f, // rotation
+            new Vector2(iconSourceRect.Width * 0.5f, iconSourceRect.Height * 0.5f), // origin - origin of the texture... like the pivot point
+            1.0f, // scale
+            SpriteEffects.None, // effects
+            0.5f // layer depth - for sorting
+            );
+
+        SpriteBatch.Draw(_logo, // texture
+            new Vector2( // position
+                Window.ClientBounds.Width * 0.5f,
+                Window.ClientBounds.Height * 0.5f),
+            wordmarkSourceRect, // source rectangle
+            Color.White, // color
+            0.0f, // rotation
+            new Vector2(wordmarkSourceRect.Width * 0.5f, wordmarkSourceRect.Height * 0.5f), // origin - origin of the texture... like the pivot point
+            1.0f, // scale
+            SpriteEffects.None, // effects
+            0.55f // layer depth - for sorting
+            );
+
         SpriteBatch.End();
 
         base.Draw(gameTime);
