@@ -2,12 +2,17 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGameLibrary;
+using MonoGameLibrary.Graphics;
 
 namespace DungeonSlime;
 
 public class Game1 : Core
 {
-    private Texture2D _logo;
+    // texture retion that defines the slime sprite in the atlas
+    private TextureRegion _slime;
+
+    // texture region that defines the bat sprite in the atlas
+    private TextureRegion _bat;
 
     public Game1() : base("Dungeon Slime", 1280, 720, false)
     {
@@ -22,7 +27,11 @@ public class Game1 : Core
 
     protected override void LoadContent()
     {
-        _logo = Content.Load<Texture2D>("images/logo");
+        TextureAtlas atlas = TextureAtlas.FromFile(Content, "images/atlas-definition.xml");
+
+        // retrieve the texture regions from the atlas
+        _slime = atlas.GetRegion("slime");
+        _bat = atlas.GetRegion("bat");
     }
 
     protected override void Update(GameTime gameTime)
@@ -39,39 +48,16 @@ public class Game1 : Core
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        // the bounds of the icon within the texture
-        Rectangle iconSourceRect = new Rectangle(0, 0, 128, 128);
-        // the bounds of the wordmark within the texture
-        Rectangle wordmarkSourceRect = new Rectangle(150, 34, 458, 58);
+        // Begin the sprite batch to prepare for rendering.
+        SpriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
-        // TODO: Add your drawing code here
-        SpriteBatch.Begin(sortMode: SpriteSortMode.BackToFront);
-        SpriteBatch.Draw(_logo, // texture
-            new Vector2( // position
-                Window.ClientBounds.Width,
-                Window.ClientBounds.Height) * 0.5f,
-            iconSourceRect, // source rectangle
-            Color.White, // color
-            0.0f, // rotation
-            new Vector2(iconSourceRect.Width * 0.5f, iconSourceRect.Height * 0.5f), // origin - origin of the texture... like the pivot point
-            1.0f, // scale
-            SpriteEffects.None, // effects
-            0.5f // layer depth - for sorting
-            );
+        // Draw the slime texture region at a scale of 4.0
+        _slime.Draw(SpriteBatch, Vector2.Zero, Color.White, 0.0f, Vector2.One, 4.0f, SpriteEffects.None, 0.0f);
 
-        SpriteBatch.Draw(_logo, // texture
-            new Vector2( // position
-                Window.ClientBounds.Width * 0.5f,
-                Window.ClientBounds.Height * 0.5f),
-            wordmarkSourceRect, // source rectangle
-            Color.White, // color
-            0.0f, // rotation
-            new Vector2(wordmarkSourceRect.Width * 0.5f, wordmarkSourceRect.Height * 0.5f), // origin - origin of the texture... like the pivot point
-            1.0f, // scale
-            SpriteEffects.None, // effects
-            0.55f // layer depth - for sorting
-            );
+        // Draw the bat texture region 10px to the right of the slime at a scale of 4.0
+        _bat.Draw(SpriteBatch, new Vector2(_slime.Width * 4.0f + 10, 0), Color.White, 0.0f, Vector2.One, 4.0f, SpriteEffects.None, 1.0f);
 
+        // Always end the sprite batch when finished.
         SpriteBatch.End();
 
         base.Draw(gameTime);
