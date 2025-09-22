@@ -1,1 +1,1 @@
-MonoGame tutorial from https://docs.monogame.net/articles/tutorials/building_2d_games/
+My work while going through the [MonoGame 2D Getting Started Tutorial](https://docs.monogame.net/articles/tutorials/building_2d_games/)
